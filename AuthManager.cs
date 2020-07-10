@@ -178,9 +178,10 @@ public class AuthManager : MonoBehaviour
 
     public void ShowGame()
     {
-        Data.GetComponent<DataManager>().exexucteTwice();
-        UIManag.GetComponent<UiManager>().cambiarResultado();
+        
+        //UIManag.GetComponent<UiManager>().cambiarResultado();
         GameMenu.SetActive(true);
+        //Data.GetComponent<DataManager>().exexucteTwice();
         FireBaseMenu.SetActive(false);
         puntaje.SetActive(true);
         restart.SetActive(true);

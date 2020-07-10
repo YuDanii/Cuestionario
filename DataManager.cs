@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
-//using Firebase.Path;
+using UnityEngine.UI;
 using Firebase.Unity.Editor;
 using Firebase.Database;
 using System.Threading.Tasks;
@@ -22,9 +22,10 @@ public class DataManager : MonoBehaviour
     [SerializeField]
     private GameObject User;
     [SerializeField]
-    private GameObject obj2;
+    private Text textToModify;
     public int tiene;
     DatabaseReference reference;
+    public UiManager manager;
 
     // Start is called before the first frame update
     void Start()
@@ -38,7 +39,16 @@ public class DataManager : MonoBehaviour
     public void LogedIn()
     {
         Path = new FireBasePathClass();
-        data = new PlayerData(PlayerData.estado.SINTOMAS);
+        UpdateGameData(false);
+        UpdateGameData(false);
+        //data = new PlayerData(PlayerData.estado.SINTOMAS);
+        //StartCoroutine(waitToChargeData());
+    }
+
+    private IEnumerator waitToChargeData()
+    {
+        yield return new WaitForSeconds(2);
+        exexucteTwice();
     }
 
 
@@ -68,12 +78,11 @@ public class DataManager : MonoBehaviour
 
     public void exexucteTwice()
     {
-        UpdateGameData();
-        UpdateGameData();
-
+        UpdateGameData(true);
+        UpdateGameData(true);
     }
 
-    public void UpdateGameData() {
+    public void UpdateGameData(bool affectGame) {
         //data = new PlayerData(false, false, false, User.GetComponent<AuthManager>().emailP);
         string numeber = User.GetComponent<AuthManager>().user.UserId;
         //var result = JsonUtility.FromJson<PlayerData>(reference.Child("User").Child(name).GetRawJsonValue());
@@ -97,22 +106,43 @@ public class DataManager : MonoBehaviour
                 foreach (var child in result.Children)
                 {
                     levelComp(child);
-
+                    
                 }
 
             }
             //data = new PlayerData(false, false, false, User.GetComponent<AuthManager>().emailP);
             
         });
+        if (affectGame == true)
+        {
+            Actualizese();
+        }
 
-
-        Actualizese();
+        
+        
 
 
     }
         
     public void Actualizese(){
-        
+        switch (data.tieneCorona)
+        {
+            case PlayerData.estado.MUY_PROBABLE_AMIGO:
+                textToModify.text = "Amigo Positivo";
+                break;
+            case PlayerData.estado.MUY_PROBALE:
+                textToModify.text = "Positivo";
+                break;
+            case PlayerData.estado.RESFRIADO:
+                textToModify.text = "Resfriado";
+                break;
+            case PlayerData.estado.SINTOMAS:
+                textToModify.text = "Sintomas no relacionados al Covid-19";
+                break;
+            default:
+                break;
+        }
+        Debug.Log("Game Updated");
     }
 
     public void levelComp(Firebase.Database.DataSnapshot snapShot) {
@@ -120,14 +150,16 @@ public class DataManager : MonoBehaviour
         var result = JsonUtility.FromJson<PlayerData>(snapShot.GetRawJsonValue());
         data = result;
         
+        
+        //Actualizese();
 
-        
-        
-        
+
+
+
 
 
         //
-        
+
 
     }
 

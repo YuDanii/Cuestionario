@@ -389,7 +389,7 @@ public class UiManager : MonoBehaviour
     }
     public void Resultados()
     {
-        sintomas.SetActive(true);
+        sintomas.SetActive(false);
         resfriado.SetActive(false);
         covidAmigo.SetActive(false);
         covidUsuario.SetActive(false);
@@ -407,11 +407,13 @@ public class UiManager : MonoBehaviour
                 text.text = "Resfriado";
                 break;
             case PlayerData.estado.SINTOMAS:
-                text.text = "Sintomas";
+                text.text = "Sintomas no relacionados al Covid-19";
                 break;
             default:
                 break;
         }
+        count = 0;
+        countText.text = "Count: " + count.ToString();
         resultadosDeTodos.SetActive(true);
     }
     public void cambiarResultado()
@@ -428,7 +430,7 @@ public class UiManager : MonoBehaviour
                 text.text = "Resfriado";
                 break;
             case PlayerData.estado.SINTOMAS:
-                text.text = "Sintomas";
+                text.text = "Sintomas no relacionados al Covid-19";
                 break;
             default:
                 break;
